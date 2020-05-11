@@ -42,6 +42,7 @@ struct mem_state {
 };
 
 void stride_initialize(iter_t iterations, void* cookie);
+void stride_reverse_initialize(iter_t iterations, void* cookie);
 void thrash_initialize(iter_t iterations, void* cookie);
 void mem_initialize(iter_t iterations, void* cookie);
 void line_initialize(iter_t iterations, void* cookie);

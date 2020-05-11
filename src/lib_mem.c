@@ -199,6 +199,30 @@ stride_initialize(iter_t iterations, void* cookie)
 	mem_reset();
 }
 
+/*
+ * Reverse the pointers circular in stride_initialize
+*/
+void
+stride_reverse_initialize(iter_t iterations, void* cookie)
+{
+	struct mem_state* state = (struct mem_state*)cookie;
+	size_t	i;
+	size_t	range = state->len;
+	size_t	stride = state->line;
+	char*	addr;
+
+	base_initialize(iterations, cookie);
+	if (!state->initialized) return;
+	addr = state->base;
+
+	for (i = range; i > stride; i -= stride) {
+		*(char **)&addr[i] = (char*)&addr[i - stride];
+	}
+	*(char **)&addr[0] = (char*)&addr[range];
+	state->p[0] = addr;
+	mem_reset();
+}
+
 void
 thrash_initialize(iter_t iterations, void* cookie)
 {

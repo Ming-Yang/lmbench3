@@ -22,7 +22,7 @@ void	loads(size_t len, size_t range, size_t stride,
 size_t	step(size_t k);
 void	initialize(iter_t iterations, void* cookie);
 
-benchmp_f	fpInit = stride_initialize;
+benchmp_f	fpInit = stride_reverse_initialize;
 
 int
 main(int ac, char **av)

@@ -13,4 +13,5 @@ then	CC=cc
 		fi
 	done
 fi
+CC=aarch64-linux-gnu-gcc
 echo $CC
