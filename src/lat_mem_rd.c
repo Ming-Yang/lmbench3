@@ -84,20 +84,21 @@ main(int ac, char **av)
 	return(0);
 }
 
-#define	ONE	p = (char **)*p;
+#define	ONE	p = (char **)*p;q=p+1;
 #define	FIVE	ONE ONE ONE ONE ONE
 #define	TEN	FIVE FIVE
 #define	FIFTY	TEN TEN TEN TEN TEN
 #define	HUNDRED	FIFTY FIFTY
 
 
-void
-benchmark_loads(iter_t iterations, void *cookie)
+void __attribute__((optimize("O0")))
+benchmark_loads_add(iter_t iterations, void *cookie)
 {
 	struct mem_state* state = (struct mem_state*)cookie;
 	register char **p = (char**)state->p[0];
 	register size_t i;
 	register size_t count = state->len / (state->line * 100) + 1;
+	register char *q;
 
 	while (iterations-- > 0) {
 		for (i = 0; i < count; ++i) {
@@ -105,10 +106,10 @@ benchmark_loads(iter_t iterations, void *cookie)
 		}
 	}
 
+	use_pointer((void*)q);
 	use_pointer((void *)p);
 	state->p[0] = (char*)p;
 }
-
 
 void
 loads(size_t len, size_t range, size_t stride, 
@@ -140,7 +141,7 @@ loads(size_t len, size_t range, size_t stride,
 	/*
 	 * Now walk them and time it.
 	 */
-	benchmp(fpInit, benchmark_loads, mem_cleanup, 
+	benchmp(fpInit, benchmark_loads_add, mem_cleanup, 
 		100000, parallel, warmup, repetitions, &state);
 #endif
 
